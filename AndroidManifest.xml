@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.otaku"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".Loginactivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Createaccount"
+            android:label="@string/title_activity_createaccount" >
+        </activity>
+        <activity
+            android:name=".Tasksubmission"
+            android:label="@string/title_activity_tasksubmission" >
+        </activity>
+        <activity
+            android:name=".Search"
+            android:label="@string/title_activity_search" >
+        </activity>
+        <activity
+            android:name=".Publicprofile"
+            android:label="@string/title_activity_publicprofile" >
+        </activity>
+        <activity
+            android:name=".Search1"
+            android:label="@string/title_activity_search1" >
+        </activity>
+        <activity
+            android:name=".Comments"
+            android:label="@string/title_activity_comments" >
+        </activity>
+        <activity
+            android:name=".Editprofile"
+            android:label="@string/title_activity_editprofile" >
+        </activity>
+        <activity
+            android:name=".Homepage"
+            android:label="@string/title_activity_homepage" >
+        </activity>
+        <activity
+            android:name=".Friends"
+            android:label="@string/title_activity_friends" >
+        </activity>
+        <activity
+            android:name=".Topposts"
+            android:label="@string/title_activity_showposts" >
+        </activity>
+        <activity
+            android:name=".Myprofile"
+            android:label="@string/title_activity_myprofile" >
+        </activity>
+        <activity
+            android:name=".Acceptchallenge"
+            android:label="@string/title_activity_acceptchallenge" >
+        </activity>
+        <activity
+            android:name=".Searchresults"
+            android:label="@string/title_activity_searchresults" >
+        </activity>
+        <activity
+            android:name=".Friendlistforchallenge"
+            android:label="@string/title_activity_friendlistforchallenge" >
+        </activity>
+        <activity
+            android:name=".FriendList"
+            android:label="@string/title_activity_friendl_list" >
+        </activity>
+        <activity
+            android:name=".Friendsposts"
+            android:label="@string/title_activity_friendsposts" >
+        </activity>
+        <activity
+            android:name=".Testfragment"
+            android:label="@string/title_activity_testfragment" >
+        </activity>
+    </application>
+
+</manifest>
