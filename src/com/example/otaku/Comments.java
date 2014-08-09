@@ -42,7 +42,7 @@ public class Comments extends Activity {
 		torc= b.getInt("torc");
 		p= b.getInt("position");
 		comments = cd.getComments(taskid,torc);
-		Toast.makeText(this, ""+p,Toast.LENGTH_SHORT).show();
+		
 		for(int i=0;i<comments.size();i++)
 			s.add("");
 		ca = new CAforComments(this, comments, s);
@@ -55,6 +55,7 @@ public class Comments extends Activity {
 		s1 = et1.getText().toString();
 		Comments_table ct=cd.createComment(s1,sf.getInt("userId",userId),torc,taskid);
         et1.setText("");
+        Toast.makeText(this, ""+taskid,Toast.LENGTH_SHORT).show();
         ptd.updateCommentCount(taskid);
         comments.add(ct);
         s.add("");

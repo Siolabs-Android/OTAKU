@@ -60,6 +60,7 @@ public class CAforMyPerformedTasks extends ArrayAdapter {
 		vd = new Votes_DAO(ctx);
 		ptd = new Performed_tasks_DAO(ctx);
 		temp.setTag((Integer) position);
+
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
 				"MMM dd,yyyy HH:MM");
 		if (position < tasks.size()) {
@@ -68,19 +69,21 @@ public class CAforMyPerformedTasks extends ArrayAdapter {
 			username.setText(ud.getUser(tasks.get(position).getSubmitted_By())
 					.getName());
 			tasktitle.setText(tasks.get(position).getTitle());
-			date.setText(simpleDateFormat.format(tasks.get(position)
-					.getSubmitted_At()));
-
+			// date.setText(simpleDateFormat.format(tasks.get(position)
+			// .getSubmitted_At()));
+			date.setText("" + tasks.get(position).get_id());
 			description.setText(tasks.get(position).getDescription());
-			comments.setText("Comment..."+tasks.get(position).getComment_Count());
+			comments.setText("Comment..."
+					+ tasks.get(position).getComment_Count());
 			Votes_table vt = vd.getVoteStatus(tasks.get(position).get_id(), 1,
 					sf.getInt("userId", userId));
 			upvote.setPressed(false);
-			
+
 			if (vt != null) {
 				upvote.setPressed(true);
 				upvote.setBackgroundColor(Color.YELLOW);
-				upvote.setText("Upvote..."+tasks.get(position).getUpvote_Count());
+				upvote.setText("Upvote..."
+						+ tasks.get(position).getUpvote_Count());
 			}
 
 			upvote.setOnClickListener(new View.OnClickListener() {
@@ -90,9 +93,10 @@ public class CAforMyPerformedTasks extends ArrayAdapter {
 						vd.createVote(sf.getInt("userId", userId), tasks.get(p)
 								.get_id(), 1);
 						ptd.updateUpvoteCount(tasks.get(p).get_id());
-						upvote.setText("Upvote..."+tasks.get(p).getUpvote_Count());
+						upvote.setText("Upvote..."
+								+ tasks.get(p).getUpvote_Count());
 						upvote.setPressed(true);
-						upvote.setBackgroundColor(Color.GRAY);
+						upvote.setBackgroundColor(Color.YELLOW);
 					}
 				}
 			});

@@ -57,9 +57,7 @@ public class Performed_tasks_DAO {
 		ptt.setDescription(cursor.getString(3));
 		ptt.setSubmitted_By(cursor.getInt(4));
 		ptt.setSubmitted_At(new Date(cursor.getLong(5)));
-
 		ptt.setUpvote_Count(cursor.getInt(6));
-
 		ptt.setComment_Count(cursor.getInt(7));
 		return ptt;
 	}
@@ -68,6 +66,7 @@ public class Performed_tasks_DAO {
 
 		Cursor cursor = database.query("PerformedTasks", allColumns, "_id="
 				+ taskid, null, null, null, null);
+		cursor.moveToFirst();
 		return cursorToPerformedTasks(cursor);
 	}
 
@@ -89,23 +88,21 @@ public class Performed_tasks_DAO {
 	}
 
 	public void updateCommentCount(int taskid) {
-		Cursor cursor = database.query("PerformedTasks", allColumns,"_id="+taskid,
-				null, null, null,null);
-		ContentValues v=new ContentValues();
-		if(cursor.moveToFirst()){
-		v.put("comment_Count",cursor.getInt(7)+1);
-		database.update("PerformedTasks", v,"_id="+taskid, null);
-		}
+		Performed_tasks_table ptt = new Performed_tasks_table();
+		ptt = getTaskById(taskid);
+		ContentValues v = new ContentValues();
+		v.put("comment_Count", ptt.getComment_Count()+1);
+		database.update("PerformedTasks", v, "_id=" + taskid, null);
+
 	}
 
 	public void updateUpvoteCount(int taskid) {
-		Cursor cursor = database.query("PerformedTasks", allColumns, "_id="
-				+ taskid, null, null, null, null);
-		ContentValues v=new ContentValues();
-		if(cursor.moveToFirst()){
-		v.put("upvote_Count",cursor.getInt(6)+1);
-		database.update("PerformedTasks", v,"_id="+taskid, null);
-		}
+		Performed_tasks_table ptt = new Performed_tasks_table();
+		ptt = getTaskById(taskid);
+		ContentValues v = new ContentValues();
+		v.put("upvote_Count", ptt.getUpvote_Count()+1);
+		database.update("PerformedTasks", v, "_id=" + taskid, null);
+
 	}
 
 	public long createTask(Performed_tasks_table ptt) {
@@ -116,8 +113,8 @@ public class Performed_tasks_DAO {
 		values.put("submitted_By", sf.getInt("userId", userId));
 		values.put("proof", ptt.getProof());
 		values.put("submitted_At", System.currentTimeMillis());
-		values.put("upvote_Count",0);
-		values.put("comment_Count",0);
+		values.put("upvote_Count", 0);
+		values.put("comment_Count", 0);
 		long p = database.insert("PerformedTasks", "    ", values);
 		return p;
 

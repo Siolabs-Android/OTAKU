@@ -25,7 +25,6 @@ public class CAforFriendRequest extends ArrayAdapter{
 	SharedPreferences sf;
 	int userId;
 	ArrayList<User_table> requests = new ArrayList<User_table>();
-	//frieeend
 	 public CAforFriendRequest(Context ctx,ArrayList<User_table> requests,ArrayList<String> s){
 		super(ctx,R.layout.friendrequest, R.id.textView1,s);
 		this.ctx = ctx;
