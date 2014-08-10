@@ -55,7 +55,6 @@ public class Comments extends Activity {
 		s1 = et1.getText().toString();
 		Comments_table ct=cd.createComment(s1,sf.getInt("userId",userId),torc,taskid);
         et1.setText("");
-        Toast.makeText(this, ""+taskid,Toast.LENGTH_SHORT).show();
         ptd.updateCommentCount(taskid);
         comments.add(ct);
         s.add("");

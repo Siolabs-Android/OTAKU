@@ -66,7 +66,6 @@ public class Tasksubmission extends Activity {
 		ptt.setDescription(description.getText().toString());
 		ptt.setProof(dp);
 		long p=ptd.createTask(ptt);
-		Toast.makeText(this,""+p, Toast.LENGTH_SHORT).show();
 		Intent i = new Intent(this, Homepage.class);
 		startActivity(i);
 	}

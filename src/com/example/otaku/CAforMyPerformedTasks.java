@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,7 +30,6 @@ public class CAforMyPerformedTasks extends ArrayAdapter {
 	ArrayList<Performed_tasks_table> tasks;
 	Votes_DAO vd;
 	Performed_tasks_DAO ptd;
-	Button upvote, comments;
 
 	public CAforMyPerformedTasks(Context ctx,
 			ArrayList<Performed_tasks_table> tasks, ArrayList<String> s) {
@@ -52,14 +52,14 @@ public class CAforMyPerformedTasks extends ArrayAdapter {
 		TextView tasktitle = (TextView) row.findViewById(R.id.textView2);
 		TextView date = (TextView) row.findViewById(R.id.textView4);
 		TextView description = (TextView) row.findViewById(R.id.textView3);
-		upvote = (Button) row.findViewById(R.id.button1);
-		final Button temp = (Button) row.findViewById(R.id.button1);
-		comments = (Button) row.findViewById(R.id.button3);
+		final Button upvote = (Button) row.findViewById(R.id.button1);
+		final Button comments = (Button) row.findViewById(R.id.button3);
 		Button givechallenge = (Button) row.findViewById(R.id.button4);
+		
 		User_DAO ud = new User_DAO(ctx);
 		vd = new Votes_DAO(ctx);
 		ptd = new Performed_tasks_DAO(ctx);
-		temp.setTag((Integer) position);
+		upvote.setTag((Integer) position);
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
 				"MMM dd,yyyy HH:MM");
@@ -69,32 +69,37 @@ public class CAforMyPerformedTasks extends ArrayAdapter {
 			username.setText(ud.getUser(tasks.get(position).getSubmitted_By())
 					.getName());
 			tasktitle.setText(tasks.get(position).getTitle());
-			// date.setText(simpleDateFormat.format(tasks.get(position)
-			// .getSubmitted_At()));
-			date.setText("" + tasks.get(position).get_id());
+			date.setText(simpleDateFormat.format(tasks.get(position)
+					.getSubmitted_At()));
 			description.setText(tasks.get(position).getDescription());
 			comments.setText("Comment..."
 					+ tasks.get(position).getComment_Count());
-			Votes_table vt = vd.getVoteStatus(tasks.get(position).get_id(), 1,
-					sf.getInt("userId", userId));
-			upvote.setPressed(false);
-
+			Votes_table vt = vd.getVoteStatus(tasks.get(position).get_id(), 1, 1);
+			
+			 upvote.setText("Upvote..."
+			 + tasks.get(position).getUpvote_Count());
 			if (vt != null) {
 				upvote.setPressed(true);
 				upvote.setBackgroundColor(Color.YELLOW);
-				upvote.setText("Upvote..."
-						+ tasks.get(position).getUpvote_Count());
-			}
 
+			}
+			else{
+				upvote.setPressed(false);
+				upvote.setBackgroundColor(Color.BLUE);
+				
+			}
+				
+			final ColorDrawable buttonColor = (ColorDrawable) upvote.getBackground();
 			upvote.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					if (!(upvote.isPressed())) {
-						int p = (Integer) temp.getTag();
+					if (buttonColor.getColor()==Color.BLUE) {
+						int p = (Integer) upvote.getTag();
 						vd.createVote(sf.getInt("userId", userId), tasks.get(p)
 								.get_id(), 1);
 						ptd.updateUpvoteCount(tasks.get(p).get_id());
 						upvote.setText("Upvote..."
-								+ tasks.get(p).getUpvote_Count());
+								+ ptd.getTaskById(tasks.get(p).get_id())
+										.getUpvote_Count());
 						upvote.setPressed(true);
 						upvote.setBackgroundColor(Color.YELLOW);
 					}
@@ -102,7 +107,7 @@ public class CAforMyPerformedTasks extends ArrayAdapter {
 			});
 			comments.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					int p = (Integer) temp.getTag();
+					int p = (Integer) upvote.getTag();
 					Intent i = new Intent(ctx, Comments.class);
 					i.putExtra("taskid", tasks.get(p).get_id());
 					i.putExtra("torc", 1);
@@ -112,7 +117,7 @@ public class CAforMyPerformedTasks extends ArrayAdapter {
 			});
 			givechallenge.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					int p = (Integer) temp.getTag();
+					int p = (Integer) upvote.getTag();
 					Intent i = new Intent(ctx, Friendlistforchallenge.class);
 					i.putExtra("taskid", tasks.get(p).get_id());
 					ctx.startActivity(i);
