@@ -20,15 +20,13 @@ import android.widget.ListView;
 
 public class Topposts extends Fragment {
 	static Context ctx;
-	SharedPreferences sf;
-	int userId;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.activity_topposts, container,
 				false);
-		sf=ctx.getSharedPreferences("SP", Context.MODE_PRIVATE);
+		 ctx=getActivity();
 		ArrayList<Performed_tasks_table> tasks = new ArrayList<Performed_tasks_table>();
 		ArrayList<String> s = new ArrayList<String>();
 		Performed_tasks_DAO ptd = new Performed_tasks_DAO(ctx);
@@ -41,8 +39,6 @@ public class Topposts extends Fragment {
 
 		return rootView;
 	}
-	 public void onAttach(Activity activity) {
-	        super.onAttach(activity);
-	       ctx=activity;
-	    }
+	
+	 
 }

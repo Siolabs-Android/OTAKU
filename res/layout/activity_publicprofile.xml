@@ -41,7 +41,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignRight="@+id/textView1"
         android:layout_below="@+id/textView1"
-        android:src="@android:drawable/btn_star" />
+        android:src="@android:drawable/btn_star"
+        android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/textView5"

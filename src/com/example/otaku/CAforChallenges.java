@@ -1,5 +1,6 @@
 package com.example.otaku;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -26,7 +27,7 @@ public class CAforChallenges extends ArrayAdapter {
 	SharedPreferences sf;
 	Context ctx;
 	ArrayList<Challenges_table> challenge;
-	Votes_DAO vd ;
+	Votes_DAO vd;
 	int userId;
 
 	public CAforChallenges(Context ctx, ArrayList<Challenges_table> challenge,
@@ -34,7 +35,7 @@ public class CAforChallenges extends ArrayAdapter {
 		super(ctx, R.layout.myperformedtasks, R.id.textView1, s);
 		this.ctx = ctx;
 		this.challenge = challenge;
-		
+
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -53,10 +54,13 @@ public class CAforChallenges extends ArrayAdapter {
 		final Button upvote = (Button) row.findViewById(R.id.button1);
 		Button comments = (Button) row.findViewById(R.id.button3);
 		Button acceptchallenge = (Button) row.findViewById(R.id.button4);
+		TextView reputationStake = (TextView) row.findViewById(R.id.textView5);
 		User_DAO ud = new User_DAO(ctx);
-		vd= new Votes_DAO(ctx);
-		sf=ctx.getSharedPreferences("SP", Context.MODE_PRIVATE);
+		vd = new Votes_DAO(ctx);
+		sf = ctx.getSharedPreferences("SP", Context.MODE_PRIVATE);
 		Performed_tasks_DAO ptd = new Performed_tasks_DAO(ctx);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+				"MMM dd,yyyy HH:MM");
 		if (position < challenge.size()) {
 			acceptchallenge.setText("Accept");
 			iv1.setImageBitmap(BitmapFactory.decodeFile(ptd.getTaskById(
@@ -65,32 +69,36 @@ public class CAforChallenges extends ArrayAdapter {
 					.getName());
 			challengetitle.setText(ptd.getTaskById(
 					challenge.get(position).getTask_Id()).getTitle());
-			date.setText((challenge.get(position).getGiven_At()).toString());
+			challengetitle.setText(ptd.getTaskById(
+					challenge.get(position).getTask_Id()).getTitle());
+			date.setText(simpleDateFormat.format(challenge.get(position)
+					.getGiven_At()));
+			reputationStake.setText(""
+					+ challenge.get(position).getReputation_Stake());
 			description.setText(ptd.getTaskById(
 					challenge.get(position).getTask_Id()).getDescription());
-			Votes_table vt=vd.getVoteStatus(challenge.get(position).get_id(),0,sf.getInt("userId",userId));
-			if(vt!=null)
+			Votes_table vt = vd.getVoteStatus(challenge.get(position).get_id(),
+					0, sf.getInt("userId", userId));
+			if (vt != null)
 				upvote.setPressed(true);
 			final int p = position;
 			upvote.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					
-					 
-					if (!(upvote.isPressed() )) {
-						vd.createVote(sf.getInt("userId",userId), challenge.get(p)
-								.get_id(),0);
+
+					if (!(upvote.isPressed())) {
+						vd.createVote(sf.getInt("userId", userId), challenge
+								.get(p).get_id(), 0);
 						upvote.setPressed(true);
 						upvote.setBackgroundColor(Color.GRAY);
 					}
 				}
 			});
 
-			
 			comments.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					Intent i = new Intent(ctx, Comments.class);
 					i.putExtra("taskid", challenge.get(p).get_id());
-					i.putExtra("torc",1);
+					i.putExtra("torc", 1);
 					ctx.startActivity(i);
 				}
 			});
@@ -99,7 +107,7 @@ public class CAforChallenges extends ArrayAdapter {
 				public void onClick(View v) {
 					Intent i = new Intent(ctx, Acceptchallenge.class);
 					i.putExtra("taskid", challenge.get(p).getTask_Id());
-					i.putExtra("cid",challenge.get(p).get_id());
+					i.putExtra("cid", challenge.get(p).get_id());
 					ctx.startActivity(i);
 				}
 			});

@@ -39,6 +39,7 @@ public class Friends_DAO {
 		else 
 			return null;
 	}
+	
  public void addFriend(int friendid){
 	 ContentValues values = new ContentValues();
 	 User_table ut=new User_table();
@@ -47,6 +48,7 @@ public class Friends_DAO {
 		values.put("request_Sender_Id", sf.getInt("userId",userId));
 		values.put("request_Reciever_Id",ut.get_id());
 		values.put("friendship_Status",0);
+		
 		database.insert("Friends",null,
 				values);
  }
@@ -64,8 +66,8 @@ public class Friends_DAO {
 	 
 	 ArrayList<Integer> i=new ArrayList<Integer>();
 	 Cursor cursor = database.query("Friends",
-				allColumns, "(request_Sender_Id=? OR request_Reciever_Id=?) AND friendship_Status=?",
-				new String[]{""+id,""+id,"0"}, null, null, null);
+				allColumns, "request_Reciever_Id=? AND friendship_Status=?",
+				new String[]{""+id,"0"}, null, null, null);
 	 cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			if(cursor.getInt(1)==id)

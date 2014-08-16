@@ -74,7 +74,7 @@ public class CAforMyPerformedTasks extends ArrayAdapter {
 			description.setText(tasks.get(position).getDescription());
 			comments.setText("Comment..."
 					+ tasks.get(position).getComment_Count());
-			Votes_table vt = vd.getVoteStatus(tasks.get(position).get_id(), 1, 1);
+			Votes_table vt = vd.getVoteStatus(tasks.get(position).get_id(), 1, sf.getInt("userId",userId));
 			
 			 upvote.setText("Upvote..."
 			 + tasks.get(position).getUpvote_Count());

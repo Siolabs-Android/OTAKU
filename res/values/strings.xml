@@ -22,5 +22,6 @@
     <string name="title_activity_testfragment">Testfragment</string>
     <string name="drawer_open">Open Drawer</string>
     <string name="drawer_close">Close Drawer</string>
+    <string name="title_activity_edittext1">Edittext1</string>
 
 </resources>

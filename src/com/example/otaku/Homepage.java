@@ -132,6 +132,7 @@ public class Homepage extends FragmentActivity implements ActionBar.TabListener 
 					startActivity(i2);
 					break;
 				default:
+					mDrawerLayout.closeDrawer(mDrawerList);
 					mDrawerLayout.openDrawer(Gravity.LEFT);
 					break;
 				}

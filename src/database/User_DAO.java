@@ -39,7 +39,14 @@ public class User_DAO {
 		else
 			return null;
 	}
+	
+	public void updateReputation(int userId,int reputation) {
+		ContentValues values = new ContentValues();
+		values.put("reputation", reputation);
+		
+		database.update("User", values, "_id=" + userId, null);
 
+	}
 	public User_table getUser(int id) {
 		Cursor cursor = database.query("User", allColumns, "_id=" + id, null,
 				null, null, null);

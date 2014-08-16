@@ -1,5 +1,6 @@
 package com.example.otaku;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import database.Challenges_DAO;
@@ -65,7 +66,9 @@ public class Publicprofile extends Activity {
 		dp = (ImageView) findViewById(R.id.imageView2);
 		name.setText(user.getName());
 		reputationpoint.setText("" + user.getReputation());
-		dob.setText((user.getDob()).toString());
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
+        String currentDate = simpleDateFormat.format(user.getDob());
+         dob.setText(currentDate);
 		city.setText(user.getCity());
 		country.setText(user.getCountry());
 		dp.setImageBitmap(BitmapFactory.decodeFile(user.getDp()));
@@ -192,5 +195,13 @@ public class Publicprofile extends Activity {
 				tasks, s);
 		lv.setAdapter(ca);
 	}
+	public void openProfileOnClick(View view) {
+
+		
+			Intent i = new Intent(this, Publicprofile.class);
+			i.putExtra("_id", id);
+			startActivity(i);
+		}
+	
 
 }

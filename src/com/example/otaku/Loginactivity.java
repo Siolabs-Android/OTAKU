@@ -27,7 +27,7 @@ public class Loginactivity extends Activity {
 
 	// Button to create an account
 	public void createNewAccount(View v) {
-
+		
 		Intent i = new Intent(getApplicationContext(), Createaccount.class);
 		startActivity(i);
 	}

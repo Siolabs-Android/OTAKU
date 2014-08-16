@@ -3,6 +3,7 @@ package com.example.otaku;
 import java.util.ArrayList;
 
 import database.Challenges_DAO;
+import database.Challenges_table;
 import database.Friends_DAO;
 import database.User_DAO;
 import database.User_table;
@@ -12,10 +13,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class Friendlistforchallenge extends Activity {
 	ListView lv;
@@ -24,42 +28,55 @@ public class Friendlistforchallenge extends Activity {
 	ArrayList<Integer> friends1;
 	SharedPreferences sf;
 	int userId;
+	User_DAO ud;
+	ArrayList<Integer> stakepoints;
+	ArrayList<Integer> selectedFriends;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_friendlistforchallenge);
-        Intent i=getIntent();
-        i.getIntExtra("taskid",taskid);
+		Intent i = getIntent();
+		taskid = i.getIntExtra("taskid", taskid);
+		
 		friends1 = new ArrayList<Integer>();
-		sf=this.getSharedPreferences("SP", Context.MODE_PRIVATE);
+		stakepoints = new ArrayList<Integer>();
+		sf = this.getSharedPreferences("SP", Context.MODE_PRIVATE);
+		userId = sf.getInt("userId", userId);
 		ArrayList<User_table> friends = new ArrayList<User_table>();
 		ArrayList<String> s = new ArrayList<String>();
-
+		selectedFriends = new ArrayList<Integer>();
 		Friends_DAO fd = new Friends_DAO(this);
-		User_DAO ud = new User_DAO(this);
+		ud = new User_DAO(this);
 		lv = (ListView) findViewById(R.id.listView1);
-		friends1 = fd.getFriends(sf.getInt("userId",userId));
+		friends1 = fd.getFriends(userId);
 		for (int i1 = 0; i1 < friends1.size(); i1++) {
 			friends.add(ud.getUser(friends1.get(i1)));
 			s.add("");
 		}
 		ca = new CAforSelectFriend(this, friends, s);
 		lv.setAdapter(ca);
-		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 	}
 
 	public void onClick(View v) {
-		SparseBooleanArray checked = lv.getCheckedItemPositions();
 		Challenges_DAO cd = new Challenges_DAO(this);
-		for (int i = 0; i < checked.size(); i++) {
-			int position = checked.keyAt(i);
-			if (checked.valueAt(i))
-				cd.createChallenge(friends1.get(position), taskid,
-						CAforSelectFriend.stakepoints.get(position));
+		int sum = 0, rp;
+		selectedFriends = ca.getSelectedFriends();
+		stakepoints = ca.getStakes();
+		rp = ud.getUser(userId).getReputation();
+		for (int j = 0; j < stakepoints.size(); j++) {
+			sum = sum + stakepoints.get(j);
 		}
-		Intent i=new Intent(this,Homepage.class);
+		if (rp < sum)
+			Toast.makeText(this, "you dont have enough reputation points",
+					Toast.LENGTH_LONG).show();
+		for (int j = 0; j < selectedFriends.size(); j++) {
+			cd.createChallenge(friends1.get(selectedFriends.get(j)), taskid,
+					stakepoints.get(j));
+		}
+
+		Intent i = new Intent(this, Homepage.class);
 		startActivity(i);
 	}
 }

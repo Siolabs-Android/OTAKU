@@ -1,5 +1,6 @@
 package com.example.otaku;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -33,7 +34,7 @@ public class CAforOthersChallenges extends ArrayAdapter {
 		super(ctx, R.layout.myperformedtasks, R.id.textView1, s);
 		this.ctx = ctx;
 		this.challenge = challenge;
-		sf=ctx.getSharedPreferences("SP", Context.MODE_PRIVATE);
+		sf = ctx.getSharedPreferences("SP", Context.MODE_PRIVATE);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -52,10 +53,13 @@ public class CAforOthersChallenges extends ArrayAdapter {
 		upvote = (Button) row.findViewById(R.id.button1);
 		comments = (Button) row.findViewById(R.id.button3);
 		Button acceptchallenge = (Button) row.findViewById(R.id.button4);
+		TextView reputationStake = (TextView) row.findViewById(R.id.textView5);
 		acceptchallenge.setVisibility(View.GONE);
 		User_DAO ud = new User_DAO(ctx);
 		Performed_tasks_DAO ptd = new Performed_tasks_DAO(ctx);
 		final Votes_DAO vd = new Votes_DAO(ctx);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+				"MMM dd,yyyy HH:MM");
 		final int p = position;
 		if (position < challenge.size()) {
 			iv1.setImageBitmap(BitmapFactory.decodeFile(ptd.getTaskById(
@@ -65,26 +69,29 @@ public class CAforOthersChallenges extends ArrayAdapter {
 					.getName());
 			challengetitle.setText(ptd.getTaskById(
 					challenge.get(position).getTask_Id()).getTitle());
-			date.setText((challenge.get(position).getGiven_At()).toString());
+			date.setText(simpleDateFormat.format(challenge.get(position)
+					.getGiven_At()));
+			reputationStake.setText(""
+					+ challenge.get(position).getReputation_Stake());
 			description.setText(ptd.getTaskById(
 					challenge.get(position).getTask_Id()).getDescription());
 			Votes_table vt = vd.getVoteStatus(challenge.get(position).get_id(),
-					0,sf.getInt("userId",userId));
-			if (vt != null) 
-				
-					upvote.setPressed(true);
-				
+					0, sf.getInt("userId", userId));
+			if (vt != null)
+
+				upvote.setPressed(true);
+
 			upvote.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					if (!(upvote.isPressed() )) {
-						vd.createVote(sf.getInt("userId",userId), challenge.get(p)
-								.get_id(), 0);
+					if (!(upvote.isPressed())) {
+						vd.createVote(sf.getInt("userId", userId), challenge
+								.get(p).get_id(), 0);
 						upvote.setPressed(true);
 						upvote.setBackgroundColor(Color.GRAY);
 					}
 				}
 			});
-			
+
 			comments.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					Intent i = new Intent(ctx, Comments.class);

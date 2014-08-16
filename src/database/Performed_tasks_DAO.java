@@ -66,8 +66,10 @@ public class Performed_tasks_DAO {
 
 		Cursor cursor = database.query("PerformedTasks", allColumns, "_id="
 				+ taskid, null, null, null, null);
-		cursor.moveToFirst();
+		if(cursor.moveToFirst())
 		return cursorToPerformedTasks(cursor);
+		else
+			return null;
 	}
 
 	public ArrayList<Performed_tasks_table> getTopposts() {

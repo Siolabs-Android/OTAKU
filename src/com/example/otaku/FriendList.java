@@ -21,23 +21,29 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 public class FriendList extends Fragment {
-	static Context ctx;
+	Context ctx;
 	SharedPreferences sf;
 	int userId;
 	User_DAO ud ;
+	CAforFriendRequest ca1;
+	static ArrayList<User_table> requests;
+	static ArrayList<User_table> friends;
+	static ArrayList<String> s;
+	static CAforFriends ca2 ;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.activity_friend_list,
 				container, false);
+		ctx=getActivity();
 		sf=ctx.getSharedPreferences("SP", Context.MODE_PRIVATE);
 		ud = new User_DAO(ctx);
 		ArrayList<Integer> requests1 = new ArrayList<Integer>();
 		ArrayList<Integer> friends1 = new ArrayList<Integer>();
-		ArrayList<User_table> requests = new ArrayList<User_table>();
-		ArrayList<User_table> friends = new ArrayList<User_table>();
-		ArrayList<String> s = new ArrayList<String>();
+		requests = new ArrayList<User_table>();
+		friends = new ArrayList<User_table>();
+		s = new ArrayList<String>();
 		ArrayList<String> s1 = new ArrayList<String>();
 		Friends_DAO fd = new Friends_DAO(ctx);
 		User_DAO ud = new User_DAO(ctx);
@@ -54,15 +60,17 @@ public class FriendList extends Fragment {
 			s1.add("");
 		}
 
-		CAforFriendRequest ca1 = new CAforFriendRequest(ctx, requests, s1);
-		CAforFriends ca2 = new CAforFriends(ctx, friends, s);
+		ca1 = new CAforFriendRequest(ctx, requests, s1);
+		ca2 = new CAforFriends(ctx, friends, s);
 		lv1.setAdapter(ca1);
 		lv2.setAdapter(ca2);
 
 		return rootView;
 	}
-	 public void onAttach(Activity activity) {
-	        super.onAttach(activity);
-	       ctx=activity;
-	    }
+	public static void addFriend(int p){
+		friends.add(requests.get(p));
+		s.add("");
+		ca2.notifyDataSetChanged();
+	}
+	
 }

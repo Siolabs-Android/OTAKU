@@ -23,7 +23,7 @@ public class Comments extends Activity {
 	Comments_DAO cd;
 	CAforComments ca;
 	SharedPreferences sf;
-	int userId,p;
+	int userId;
 	ArrayList<String> s;
 	ArrayList<Comments_table> comments;
 	Performed_tasks_DAO ptd;
@@ -40,7 +40,6 @@ public class Comments extends Activity {
 		Bundle b = getIntent().getExtras();     
 		taskid= b.getInt("taskid");
 		torc= b.getInt("torc");
-		p= b.getInt("position");
 		comments = cd.getComments(taskid,torc);
 		
 		for(int i=0;i<comments.size();i++)

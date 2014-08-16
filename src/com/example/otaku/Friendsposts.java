@@ -27,6 +27,7 @@ public class Friendsposts extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.activity_friendsposts,
 				container, false);
+		ctx=getActivity();
 		ArrayList<Performed_tasks_table> tasks = new ArrayList<Performed_tasks_table>();
 		ArrayList<Integer> friends = new ArrayList<Integer>();
 		Friends_DAO fd=new Friends_DAO(ctx);
@@ -45,8 +46,5 @@ public class Friendsposts extends Fragment {
 
 		return rootView;
 	}
-	 public void onAttach(Activity activity) {
-	        super.onAttach(activity);
-	       ctx=activity;
-	    }
+	
 }

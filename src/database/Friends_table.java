@@ -7,6 +7,7 @@ public class Friends_table implements Serializable{
 	int request_Sender_Id;
 	int request_Reciever_Id;
 	int friendship_Status;
+	
 	public int get_id() {
 		return _id;
 	}

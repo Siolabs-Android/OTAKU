@@ -13,53 +13,33 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class Searchresults extends Activity {
-	SharedPreferences sf;
-	int userId;
+	ListView lv;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_searchresults);
-		sf=this.getSharedPreferences("SP", Context.MODE_PRIVATE);
+		lv = (ListView) findViewById(R.id.listView1);
 	}
 
 	public void publicSearch(View view) {
 		User_DAO ud = new User_DAO(this);
-		CAforSearchResults ca;
 		EditText et = (EditText) findViewById(R.id.editText1);
-		ListView lv = (ListView) findViewById(R.id.listView1);
 		ArrayList<String> s1 = new ArrayList<String>();
 		String s = et.getText().toString();
-		final ArrayList<User_table> user = ud.publicSearch(s);
-		for(int i=0;i<user.size();i++)
+		ArrayList<User_table> user = ud.publicSearch(s);
+		for (int i = 0; i < user.size(); i++)
 			s1.add("");
-
-		ca = new CAforSearchResults(this, user, s1);
+		//Toast.makeText(this, user.get(0).getDp(),Toast.LENGTH_SHORT).show();
+		CAforSearchResults ca = new CAforSearchResults(this, user, s1);
 		lv.setAdapter(ca);
-		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1,
-					int position, long id) {
-				OpenProfileOnClick(user.get(position).get_id());
-
-			}
-		});
 
 	}
 
-	public void OpenProfileOnClick(int id) {
-
-		if (id ==sf.getInt("userId",userId)) {
-			Intent i = new Intent(this, Myprofile.class);
-			startActivity(i);
-		} else {
-			Intent i = new Intent(this, Publicprofile.class);
-			i.putExtra("_id", id);
-			startActivity(i);
-		}
-	}
 }

@@ -16,25 +16,26 @@ import android.database.sqlite.SQLiteDatabase;
 public class Challenges_DAO {
 	private SQLiteDatabase database;
 	private MyDatabase dbHelper;
-	private String[] allColumns  = {"_id","task_Id","given_By","given_To","given_At","recieve_Status","reputation_Stake",
-			"upvote_Count","comment_Count","proof"};
+	private String[] allColumns = { "_id", "task_Id", "given_By", "given_To",
+			"given_At", "recieve_Status", "reputation_Stake", "upvote_Count",
+			"comment_Count", "proof" };
 	static SharedPreferences sf;
 	int userId;
-	public Challenges_DAO(Context context){
+
+	public Challenges_DAO(Context context) {
 		dbHelper = new MyDatabase(context);
 		database = dbHelper.getWritableDatabase();
-		sf=context.getSharedPreferences("SP", Context.MODE_PRIVATE);
+		sf = context.getSharedPreferences("SP", Context.MODE_PRIVATE);
 	}
 
-	
-
-	public void close(){
+	public void close() {
 		dbHelper.close();
 	}
-	public ArrayList<Challenges_table> getChallenges(int id){
-		ArrayList<Challenges_table> challenges=new ArrayList<Challenges_table>();
-		Cursor cursor = database.query("Challenges",
-				allColumns, "given_To="+id, null, null, null, null);
+
+	public ArrayList<Challenges_table> getChallenges(int id) {
+		ArrayList<Challenges_table> challenges = new ArrayList<Challenges_table>();
+		Cursor cursor = database.query("Challenges", allColumns, "given_To="
+				+ id, null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -46,39 +47,54 @@ public class Challenges_DAO {
 		cursor.close();
 		return challenges;
 	}
-	public void createChallenge(int givento,int taskid,int points){
-		ContentValues v=new ContentValues();
-		v.put("given_By", sf.getInt("userId",userId) );
-		v.put("given_To",givento);
-		v.put("task_Id",taskid );
-		v.put("reputation_Stake",points);
-		v.put("given_At",System.currentTimeMillis() );
-		v.put("recieve_Status",0);
-		v.put("upvote_Count",0);
-		v.put("comment_Count",0);
-		database.insert("Challenges","    ",
-				v);
+
+	public void createChallenge(int givento, int taskid, int points) {
+		ContentValues v = new ContentValues();
+		
+		
+		Cursor cursor = database.query("Challenges", allColumns,
+				"given_To=? AND task_Id=?", new String[] { "" + givento,
+						"" + taskid }, null, null, null);
+		if (!cursor.moveToFirst()) {
+
+			v.put("given_By", sf.getInt("userId", userId));
+			v.put("given_To", givento);
+			v.put("task_Id", taskid);
+			v.put("reputation_Stake", points);
+			v.put("given_At", System.currentTimeMillis());
+			v.put("recieve_Status", 0);
+			v.put("upvote_Count", 0);
+			v.put("comment_Count", 0);
+			database.insert("Challenges", "    ", v);
+		}
+		
 	}
-	
+	public Challenges_table getChallengeById(int taskid) {
+
+		Cursor cursor = database.query("Challenges", allColumns, "_id="
+				+ taskid, null, null, null, null);
+		cursor.moveToFirst();
+		return cursorToChallenges(cursor);
+	}
 
 	public void updateCommentCount(int taskid) {
-		Cursor cursor = database.query("Challenges", allColumns,"_id="+taskid,
-				null, null, null,null);
-		ContentValues v=new ContentValues();
-		v.put("comment_Count",cursor.getInt(7)+1);
-		database.update("Challenges", v,"_id="+taskid, null);
+		Cursor cursor = database.query("Challenges", allColumns, "_id="
+				+ taskid, null, null, null, null);
+		ContentValues v = new ContentValues();
+		v.put("comment_Count", cursor.getInt(7) + 1);
+		database.update("Challenges", v, "_id=" + taskid, null);
 	}
 
 	public void updateUpvoteCount(int taskid) {
-		Cursor cursor = database.query("Challenges", allColumns,"_id="+taskid,
-				null, null, null,null);
-		ContentValues v=new ContentValues();
-		v.put("upvote_Count",cursor.getInt(6)+1);
-		database.update("Challenges", v,"_id="+taskid, null);
+		Cursor cursor = database.query("Challenges", allColumns, "_id="
+				+ taskid, null, null, null, null);
+		ContentValues v = new ContentValues();
+		v.put("upvote_Count", cursor.getInt(6) + 1);
+		database.update("Challenges", v, "_id=" + taskid, null);
 	}
 
 	private Challenges_table cursorToChallenges(Cursor cursor) {
-		Challenges_table ch  = new Challenges_table();
+		Challenges_table ch = new Challenges_table();
 		ch.set_id(cursor.getInt(0));
 		ch.setTask_Id(cursor.getInt(1));
 		ch.setGiven_By(cursor.getInt(2));
@@ -92,10 +108,8 @@ public class Challenges_DAO {
 		return ch;
 	}
 
+	public void deleteChallenge(long k) {
+		database.delete("Challenges", "_id=" + k, null);
 
-
-	public void deleteChallenge(int cid) {
-		database.delete("Challenges","_id="+cid,null);
-		
 	}
 }

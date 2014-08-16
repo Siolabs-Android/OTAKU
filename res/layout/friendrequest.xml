@@ -8,18 +8,19 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_launcher"
+        android:scaleType="fitXY"  />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageView1"
+        android:layout_toLeftOf="@+id/button2"
         android:layout_toRightOf="@+id/imageView1"
         android:text=""
-       
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
@@ -27,6 +28,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/button2"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="Reject" />
@@ -36,6 +38,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView1"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/button1"
         android:text="Accept" />
