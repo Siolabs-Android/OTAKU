@@ -21,7 +21,7 @@ public class Loginactivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_loginactivity);
+		setContentView(R.layout.activity_login_new);
 
 	}
 
@@ -63,6 +63,13 @@ public class Loginactivity extends Activity {
 //			startActivity(i);
 //		}
 
+	}
+	
+	
+	public void createAcc(View v){
+		
+		Intent i = new Intent(getApplicationContext(), Createaccount.class);
+		startActivity(i);
 	}
 
 }
